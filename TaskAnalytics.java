@@ -21,10 +21,10 @@ public class TaskAnalytics {
         this.taskList = new ArrayList<>();
     }
 
-    // Method to add a task
+    /* Method to add a task
     public void addTask(String title, boolean isComplete, String category) {
         taskList.add(new Task(title, isComplete, category));
-    }
+    } */
 
     // Analytics method to calculate and display task completion stats
     public void displayAnalytics() {
@@ -54,6 +54,7 @@ public class TaskAnalytics {
         }
     }
 
+    /*
     public static void main(String[] args) {
         TaskAnalytics manager = new TaskAnalytics();
 
@@ -66,4 +67,5 @@ public class TaskAnalytics {
         // Display analytics
         manager.displayAnalytics();
     }
+    */
 }
