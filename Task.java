@@ -9,9 +9,9 @@ public class Task {
     public Task(String title, String description, String dueDate, String category, String priority, boolean isComplete) {
         this.title = title;
         this.description = description;
-        setDueDate(dueDate); 
+        this.dueDate = dueDate;
         this.category = category;
-        setPriority(priority); 
+        this.priority = priority;
         this.isComplete = isComplete;
     }
 
@@ -38,13 +38,15 @@ public class Task {
             return Integer.parseInt(dueDate.replace("-", ""));
         } catch (NumberFormatException e) {
             System.err.println("Invalid date format: " + dueDate);
-            return Integer.MAX_VALUE; // Return a large value for invalid date
+            return Integer.MAX_VALUE;  // Return a large value in case of invalid date
         }
     }
 
     @Override
     public String toString() {
-        return String.format("\n Title: %-20s \n Description: %s \n Due Date: %s \n Category: %s \n Priority: %s \n Complete: %b",
-                title, description, dueDate, category, priority, isComplete);
+        return String.format(
+            "\nTitle: %-20s\nDescription: %-15s\nDue Date: %s\nCategory: %-10s\nPriority: %s \n[%s]",
+            title, description, dueDate, category,priority,isComplete ? "Complete" : "Incomplete");
     }
+
 }
