@@ -9,7 +9,7 @@ public class TaskManager {
     }
 
     //on progress, still error
-    public void sortTasksByDueDateAscending() {
+   /* public void sortTasksByDueDateAscending() {
         tasks.sort(Comparator.comparingInt(Task::getDueDateAsInteger));
         System.out.println("\nTasks sorted by due date (ascending).");
     }
@@ -28,7 +28,7 @@ public class TaskManager {
         tasks.sort((task1, task2) -> Integer.compare(mapPriorityToValue(task1.getPriority()), mapPriorityToValue(task2.getPriority())));
         System.out.println("\nTasks sorted by priority (low to high).");
     }
-
+*/
     // Map priority to numeric value for comparison
     private int mapPriorityToValue(String priority) {
         switch (priority.toLowerCase()) {
