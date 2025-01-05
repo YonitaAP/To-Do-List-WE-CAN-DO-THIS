@@ -52,9 +52,8 @@ public class ManageTasks {
             return;
         }
 
-        System.out.println("\n—— View All Tasks ——");
         for (int i = 0; i < tasks.size(); i++) {
-            System.out.println("Task " + (i + 1) + ": " + tasks.get(i));
+            System.out.println("\nTask " + (i + 1) + tasks.get(i));
         }
 
         System.out.print("Enter the task number to mark as complete: ");
@@ -76,7 +75,7 @@ public class ManageTasks {
 
         System.out.println("\n—— View All Tasks ——");
         for (int i = 0; i < tasks.size(); i++) {
-            System.out.println("Task " + (i + 1) + ": " + tasks.get(i));
+            System.out.println("\nTask " + (i + 1) + ": " + tasks.get(i));
         }
 
         System.out.print("\nEnter the task number to delete: ");
