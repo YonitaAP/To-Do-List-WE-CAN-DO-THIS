@@ -44,7 +44,7 @@ public class ToDoListApp {
                     deleteTask(scanner);
                     break;
                 case 5:
-                    System.out.println("\n—— Sort Tasks——");    //still not working
+                    System.out.println("\n—— Sort Tasks——");
                     sortTasks(scanner);
                     break;
                 case 6:
@@ -63,17 +63,39 @@ public class ToDoListApp {
         scanner.close();
     }
 
+    
     private static void addTask(Scanner scanner) {
+        String title, description, dueDate, category, priority; //declare variables
+
         System.out.print("Enter task title: ");
-        String title = scanner.nextLine();
+        title = scanner.nextLine();
         System.out.print("Enter task description: ");
-        String description = scanner.nextLine();
-        System.out.print("Enter due date (YYYY-MM-DD): ");
-        String dueDate = scanner.nextLine();
+        description = scanner.nextLine();
+
+    // Validate due date input
+        while (true) {
+            System.out.print("Enter due date (YYYY-MM-DD): ");
+            dueDate = scanner.nextLine();
+            if (dueDate.matches("\\d{4}-\\d{2}-\\d{2}")) {
+                break; // Valid date
+            } else {
+                System.out.println("Invalid due date format. Please use YYYY-MM-DD.");
+            }
+        }
+
         System.out.print("Enter task category (Homework, Personal, Work): ");
-        String category = scanner.nextLine();
-        System.out.print("Enter priority level (Low, Medium, High): ");
-        String priority = scanner.nextLine();
+        category = scanner.nextLine();
+
+        // Validate priority input
+        while (true) {
+            System.out.print("Enter priority level (Low, Medium, High): ");
+            priority = scanner.nextLine();
+            if (priority.equalsIgnoreCase("Low") || priority.equalsIgnoreCase("Medium") || priority.equalsIgnoreCase("High")) {
+                break; 
+            } else {
+                System.out.println("Invalid priority. Please enter 'Low', 'Medium', or 'High'.");
+            }
+        }
 
         tasks.add(new Task(title, description, dueDate, category, priority, false));
         System.out.println("\nTask \"" + title + "\" added successfully!");
@@ -114,7 +136,7 @@ public class ToDoListApp {
             System.out.println("\nInvalid task number.");
         }
     }  
-    /*
+    
     private static void sortTasks(Scanner scanner) { //gobackto this later
         System.out.println("Sort by:");
         System.out.println("1. Due Date (Ascending)");
@@ -141,7 +163,7 @@ public class ToDoListApp {
                 System.out.println("\nInvalid sorting option.");
         }
     }
-*/
+
     private static void searchTasks(Scanner scanner) {
         System.out.println("\nSearch by:");
         System.out.println("1. Title");
