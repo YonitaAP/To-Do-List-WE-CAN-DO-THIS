@@ -1,9 +1,3 @@
-package todolistapp;
-
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 
 public class Task {
     private String title;
@@ -13,34 +7,37 @@ public class Task {
     private String priority;
     private boolean isComplete;
 
-    // Constructor
-    public Task(String title, String description, String dueDate, String category, String priority) {
+    public Task(String title, String description, String dueDate, String category, String priority, boolean isComplete) {
         this.title = title;
         this.description = description;
         this.dueDate = dueDate;
         this.category = category;
         this.priority = priority;
-        this.isComplete = false;
-    }
-
-    // Getters and Setters
-    public String getTitle() {
-        return title;
-    }
-
-    public void setComplete(boolean isComplete) {
         this.isComplete = isComplete;
     }
 
-    public boolean isComplete() {
-        return isComplete;
-    }
+    public String getTitle() { return title; }
+    public void setTitle(String title) { this.title = title; }
+
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
+
+    public String getDueDate() { return dueDate; }
+    public void setDueDate(String dueDate) { this.dueDate = dueDate; }
+
+    public String getCategory() { return category; }
+    public void setCategory(String category) { this.category = category; }
+
+    public String getPriority() { return priority; }
+    public void setPriority(String priority) { this.priority = priority; }
+
+    public boolean isComplete() { return isComplete; }
+    public void setComplete(boolean isComplete) { this.isComplete = isComplete; }
+    
 
     @Override
     public String toString() {
-        return "Title: " + title + "\nDescription: " + description +
-               "\nDue Date: " + dueDate + "\nCategory: " + category +
-               "\nPriority: " + priority + "\nStatus: " + (isComplete ? "Complete" : "Incomplete");
+        return String.format("\n Title: %-20s \n Description: %s \n Due Date: %s \n Category: %s \n Priority: %s \n Complete: %b",
+                title, description, dueDate, category, priority, isComplete);
     }
 }
-
