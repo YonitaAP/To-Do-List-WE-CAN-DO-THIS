@@ -1,75 +1,50 @@
-import java.util.*;
+public class Task {
+    private String title;
+    private String description;
+    private String dueDate;
+    private String category;
+    private String priority;
+    private boolean isComplete;
 
-public class TaskManager {
-    private List<Task> tasks;
-
-    public TaskManager(List<Task> tasks) {
-        this.tasks = tasks;
+    public Task(String title, String description, String dueDate, String category, String priority, boolean isComplete) {
+        this.title = title;
+        this.description = description;
+        setDueDate(dueDate); 
+        this.category = category;
+        setPriority(priority); 
+        this.isComplete = isComplete;
     }
 
-    // Debugging: print sorted tasks
-    public void sortTasksByDueDateAscending() {
-        tasks.sort(Comparator.comparingInt(Task::getDueDateAsInteger));
-        System.out.println("\nTasks sorted by due date (ascending):");
-        printTasks(); 
-    }
+    public String getTitle() { return title; }
+    public void setTitle(String title) { this.title = title; }
 
-    public void sortTasksByDueDateDescending() {
-        tasks.sort((task1, task2) -> Integer.compare(task2.getDueDateAsInteger(), task1.getDueDateAsInteger()));
-        System.out.println("\nTasks sorted by due date (descending):");
-        printTasks(); 
-    }
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
 
-    public void sortTasksByPriorityHighToLow() {
-        tasks.sort((task1, task2) -> Integer.compare(mapPriorityToValue(task2.getPriority()), mapPriorityToValue(task1.getPriority())));
-        System.out.println("\nTasks sorted by priority (high to low):");
-        printTasks();
-    }
+    public String getDueDate() { return dueDate; }
+    public void setDueDate(String dueDate) { this.dueDate = dueDate; }
 
-    public void sortTasksByPriorityLowToHigh() {
-        tasks.sort((task1, task2) -> Integer.compare(mapPriorityToValue(task1.getPriority()), mapPriorityToValue(task2.getPriority())));
-        System.out.println("\nTasks sorted by priority (low to high):");
-        printTasks();
-    }
+    public String getCategory() { return category; }
+    public void setCategory(String category) { this.category = category; }
 
-    private int mapPriorityToValue(String priority) {
-        switch (priority.toLowerCase()) {
-            case "high": return 3;
-            case "medium": return 2;
-            case "low": return 1;
-            default: return Integer.MAX_VALUE;
+    public String getPriority() { return priority; }
+    public void setPriority(String priority) { this.priority = priority; }
+
+    public boolean isComplete() { return isComplete; }
+    public void setComplete(boolean isComplete) { this.isComplete = isComplete; }
+
+    public int getDueDateAsInteger() {
+        try {
+            return Integer.parseInt(dueDate.replace("-", ""));
+        } catch (NumberFormatException e) {
+            System.err.println("Invalid date format: " + dueDate);
+            return Integer.MAX_VALUE; // Return a large value for invalid date
         }
     }
 
-    public void searchTasksByTitle(String title) {
-        boolean found = false;
-        for (Task task : tasks) {
-            if (task.getTitle().equalsIgnoreCase(title)) {
-                System.out.println("\nFound Task: " + task);
-                found = true;
-            }
-        }
-        if (!found) {
-            System.out.println("\nNo task found with the title: " + title);
-        }
-    }
-
-    public void searchTasksByCategory(String category) {
-        boolean found = false;
-        for (Task task : tasks) {
-            if (task.getCategory().equalsIgnoreCase(category)) {
-                System.out.println("\nFound Task: " + task);
-                found = true;
-            }
-        }
-        if (!found) {
-            System.out.println("\nNo task found in the category: " + category);
-        }
-    }
-
-    private void printTasks() {
-        for (Task task : tasks) {
-            System.out.println(task);
-        }
+    @Override
+    public String toString() {
+        return String.format("\n Title: %-20s \n Description: %s \n Due Date: %s \n Category: %s \n Priority: %s \n Complete: %b",
+                title, description, dueDate, category, priority, isComplete);
     }
 }
