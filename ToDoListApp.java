@@ -191,8 +191,7 @@ Pending:
 - Extra feature (Email notif)
  
 NOTES
-- Go back to view all tasks after task is changed?
-- clear the output after a command is done
-- Task sorting still not working. add from descending ascending, high-low
--have to convert to integer
+- clear the output after a command is done?
+- Task sorting still not working. add from descending ascending, high-low. have to convert to integer
+
 */
