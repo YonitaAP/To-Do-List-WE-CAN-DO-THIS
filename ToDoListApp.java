@@ -44,7 +44,7 @@ public class ToDoListApp {
                     deleteTask(scanner);
                     break;
                 case 5:
-                    System.out.println("\n—— Sort Tasks——");
+                    System.out.println("\n—— Sort Tasks——");    //still not working
                     sortTasks(scanner);
                     break;
                 case 6:
