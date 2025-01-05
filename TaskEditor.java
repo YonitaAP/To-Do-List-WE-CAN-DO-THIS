@@ -1,4 +1,3 @@
-
 import java.util.List;
 import java.util.Scanner;
 
@@ -15,9 +14,8 @@ public class TaskEditor {
             return;
         }
 
-        System.out.println("\n—— View All Tasks ——");
         for (int i = 0; i < tasks.size(); i++) {
-            System.out.println((i + 1) + ". " + tasks.get(i));
+            System.out.println("\nTask " + (i + 1) + tasks.get(i));
         }
 
         System.out.print("\nEnter the task number to edit: ");
