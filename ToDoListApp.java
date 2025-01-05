@@ -198,10 +198,9 @@ Completed & integrated:
 - Task creation
 - Task deletion
 - Task searching
-
+- Task Sorting
 
 Completed:
-- Task Sorting
 - Recurring tasks
 - Extra feature (Data analytics)
 - Task dependencies
