@@ -58,7 +58,7 @@ public class ToDoListApp {
                 default:
                     System.out.println("\nInvalid choice. Please try again.");
             }
-        } while (choice != 5);
+        } while (choice != 7);
 
         scanner.close();
     }
