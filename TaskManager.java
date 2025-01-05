@@ -7,28 +7,29 @@ public class TaskManager {
         this.tasks = tasks;
     }
 
+    // Debugging: print sorted tasks
     public void sortTasksByDueDateAscending() {
         tasks.sort(Comparator.comparingInt(Task::getDueDateAsInteger));
         System.out.println("\nTasks sorted by due date (ascending):");
-        printTasks(); // Debugging: print sorted tasks
+        printTasks(); 
     }
 
     public void sortTasksByDueDateDescending() {
         tasks.sort((task1, task2) -> Integer.compare(task2.getDueDateAsInteger(), task1.getDueDateAsInteger()));
         System.out.println("\nTasks sorted by due date (descending):");
-        printTasks(); // Debugging: print sorted tasks
+        printTasks(); 
     }
 
     public void sortTasksByPriorityHighToLow() {
         tasks.sort((task1, task2) -> Integer.compare(mapPriorityToValue(task2.getPriority()), mapPriorityToValue(task1.getPriority())));
         System.out.println("\nTasks sorted by priority (high to low):");
-        printTasks(); // Debugging: print sorted tasks
+        printTasks();
     }
 
     public void sortTasksByPriorityLowToHigh() {
         tasks.sort((task1, task2) -> Integer.compare(mapPriorityToValue(task1.getPriority()), mapPriorityToValue(task2.getPriority())));
         System.out.println("\nTasks sorted by priority (low to high):");
-        printTasks(); // Debugging: print sorted tasks
+        printTasks();
     }
 
     private int mapPriorityToValue(String priority) {
