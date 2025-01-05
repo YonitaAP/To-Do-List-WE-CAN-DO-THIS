@@ -1,4 +1,3 @@
-
 import java.io.*;
 import java.util.*;
 
@@ -20,6 +19,8 @@ public class TaskStorage {
         }
     }
 
+    //close writer?
+    
     public List<Task> loadTasks() {
         List<Task> tasks = new ArrayList<>();
         File file = new File(FILE_NAME);
