@@ -114,7 +114,7 @@ public class ToDoListApp {
             System.out.println("\nInvalid task number.");
         }
     }  
-    
+    /*
     private static void sortTasks(Scanner scanner) { //gobackto this later
         System.out.println("Sort by:");
         System.out.println("1. Due Date (Ascending)");
@@ -141,7 +141,7 @@ public class ToDoListApp {
                 System.out.println("\nInvalid sorting option.");
         }
     }
-
+*/
     private static void searchTasks(Scanner scanner) {
         System.out.println("\nSearch by:");
         System.out.println("1. Title");
