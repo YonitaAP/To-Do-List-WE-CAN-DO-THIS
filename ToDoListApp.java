@@ -5,11 +5,17 @@ import java.util.Scanner;
 public class ToDoListApp {
     private static List<Task> tasks = new ArrayList<>();
     private static TaskStorage taskStorage = new TaskStorage();
-    private static TaskManager taskManager;
+    private static SearchSortTasks searchSortTasks;
+    private static TaskEditor taskEditor;
+    private static RecurringTask recurringTask;
+    private static ManageTasks manageTasks;
 
     public static void main(String[] args) {
         tasks = taskStorage.loadTasks(); // Load tasks from CSV
-        taskManager = new TaskManager(tasks);
+        searchSortTasks = new SearchSortTasks(tasks);
+        taskEditor = new TaskEditor(tasks);
+        recurringTask = new RecurringTask(tasks);
+        manageTasks = new ManageTasks(tasks);
         Scanner scanner = new Scanner(System.in);
         int choice;
 
@@ -21,7 +27,9 @@ public class ToDoListApp {
             System.out.println("4. Delete Task");
             System.out.println("5. Sort Tasks");
             System.out.println("6. Search Tasks");
-            System.out.println("7. Save and Exit");
+            System.out.println("7. Edit Task");
+            System.out.println("8. Add Recurring Task");
+            System.out.println("9. Save and Exit");
             System.out.print("Enter your choice: ");
             choice = scanner.nextInt();
             scanner.nextLine(); // Consume newline
@@ -29,7 +37,7 @@ public class ToDoListApp {
             switch (choice) {
                 case 1:
                     System.out.println("\n—— Add a New Task ——");
-                    addTask(scanner);
+                    manageTasks.addTask(scanner);
                     break;
                 case 2:
                     System.out.println("\n—— View All Tasks ——");
@@ -37,68 +45,38 @@ public class ToDoListApp {
                     break;
                 case 3:
                     System.out.println("\n—— Mark Task as Complete ——");
-                    markTaskComplete(scanner);
+                    manageTasks.markTaskComplete(scanner);
                     break;
                 case 4:
                     System.out.println("\n—— Delete a Task ——");
-                    deleteTask(scanner);
+                    manageTasks.deleteTask(scanner);
                     break;
                 case 5:
-                    System.out.println("\n—— Sort Tasks——");
+                    System.out.println("\n—— Sort Tasks ——");
                     sortTasks(scanner);
                     break;
                 case 6:
-                    System.out.println("\n—— Search Tasks——");
+                    System.out.println("\n—— Search Tasks ——");
                     searchTasks(scanner);
                     break;
                 case 7:
+                    System.out.println("\n—— Edit Task ——");
+                    taskEditor.editTask(scanner);
+                    break;
+                case 8:
+                    System.out.println("\n—— Add Recurring Task ——");
+                    recurringTask.addRecurringTask(scanner);
+                    break;
+                case 9:
                     taskStorage.saveTasks(tasks); // Save tasks to CSV before exiting
                     System.out.println("Exiting program.");
                     break;
                 default:
                     System.out.println("\nInvalid choice. Please try again.");
             }
-        } while (choice != 7);
+        } while (choice != 9);
 
         scanner.close();
-    }
-
-    
-    private static void addTask(Scanner scanner) {
-        String title, description, dueDate, category, priority; //declare variables
-
-        System.out.print("Enter task title: ");
-        title = scanner.nextLine();
-        System.out.print("Enter task description: ");
-        description = scanner.nextLine();
-
-    // Validate due date input
-        while (true) {
-            System.out.print("Enter due date (YYYY-MM-DD): ");
-            dueDate = scanner.nextLine();
-            if (dueDate.matches("\\d{4}-\\d{2}-\\d{2}")) {
-                break; // Valid date
-            } else {
-                System.out.println("Invalid due date format. Please use YYYY-MM-DD.");
-            }
-        }
-
-        System.out.print("Enter task category (Homework, Personal, Work): ");
-        category = scanner.nextLine();
-
-        // Validate priority input
-        while (true) {
-            System.out.print("Enter priority level (Low, Medium, High): ");
-            priority = scanner.nextLine();
-            if (priority.equalsIgnoreCase("Low") || priority.equalsIgnoreCase("Medium") || priority.equalsIgnoreCase("High")) {
-                break; 
-            } else {
-                System.out.println("Invalid priority. Please enter 'Low', 'Medium', or 'High'.");
-            }
-        }
-
-        tasks.add(new Task(title, description, dueDate, category, priority, false));
-        System.out.println("\nTask \"" + title + "\" added successfully!");
     }
 
     private static void viewTasks() {
@@ -106,38 +84,12 @@ public class ToDoListApp {
             System.out.println("\nNo tasks available.");
         } else {
             for (int i = 0; i < tasks.size(); i++) {
-                System.out.println("\nTask " + (i + 1) + tasks.get(i));
+                System.out.println("\nTask " + (i + 1) + " " + tasks.get(i));
             }
         }
     }
 
-    private static void markTaskComplete(Scanner scanner) {
-        viewTasks();
-        System.out.print("Enter the task number to mark as complete: ");
-        int taskNumber = scanner.nextInt();
-
-        if (taskNumber > 0 && taskNumber <= tasks.size()) {
-            tasks.get(taskNumber - 1).setComplete(true);
-            System.out.println("\nTask marked as complete!");
-        } else {
-            System.out.println("\nInvalid task number.");
-        }
-    }
-
-    private static void deleteTask(Scanner scanner) {
-        viewTasks();
-        System.out.print("\nEnter the task number to delete: ");
-        int taskNumber = scanner.nextInt();
-
-        if (taskNumber > 0 && taskNumber <= tasks.size()) {
-            tasks.remove(taskNumber - 1);
-            System.out.println("\nTask deleted successfully!");
-        } else {
-            System.out.println("\nInvalid task number.");
-        }
-    }  
-    
-    private static void sortTasks(Scanner scanner) { //gobackto this later
+    private static void sortTasks(Scanner scanner) {
         System.out.println("Sort by:");
         System.out.println("1. Due Date (Ascending)");
         System.out.println("2. Due Date (Descending)");
@@ -148,16 +100,16 @@ public class ToDoListApp {
 
         switch (sortChoice) {
             case 1:
-                taskManager.sortTasksByDueDateAscending();
+                searchSortTasks.sortTasksByDueDateAscending();
                 break;
             case 2:
-                taskManager.sortTasksByDueDateDescending();
+                searchSortTasks.sortTasksByDueDateDescending();
                 break;
             case 3:
-                taskManager.sortTasksByPriorityHighToLow();
+                searchSortTasks.sortTasksByPriorityHighToLow();
                 break;
             case 4:
-                taskManager.sortTasksByPriorityLowToHigh();
+                searchSortTasks.sortTasksByPriorityLowToHigh();
                 break;
             default:
                 System.out.println("\nInvalid sorting option.");
@@ -176,18 +128,19 @@ public class ToDoListApp {
             case 1:
                 System.out.print("Enter the task title: ");
                 String title = scanner.nextLine();
-                taskManager.searchTasksByTitle(title);
+                searchSortTasks.searchTasksByTitle(title);
                 break;
             case 2:
                 System.out.print("Enter the task category: ");
                 String category = scanner.nextLine();
-                taskManager.searchTasksByCategory(category);
+                searchSortTasks.searchTasksByCategory(category);
                 break;
             default:
                 System.out.println("\nInvalid choice.");
         }
     }
 }
+
 
 /*
 PROGRESS
@@ -199,20 +152,22 @@ Completed & integrated:
 - Task deletion
 - Task searching
 - Task Sorting
+- Edit task
+- Recurring tasks
+
 
 Completed:
-- Recurring tasks
-- Extra feature (Data analytics)
 - Task dependencies
-- Task management
+- Extra feature (Data analytics)
 
 Pending:
-- Edit task
 - Extra feature(GUI)
 - Extra feature (Email notif)
  
 NOTES
-- clear the output after a command is done?
-- Task sorting still not working. add from descending ascending, high-low. have to convert to integer
-
+- Go back to view all tasks after task is changed?
+- clear the output after a command is done
+- back to menu option if accidentally clicked
+- move add recurring task to sub of add task
+- add task dependencies in edit task
 */
