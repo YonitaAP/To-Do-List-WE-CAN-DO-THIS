@@ -34,7 +34,18 @@ public class Task {
     public boolean isComplete() { return isComplete; }
     public void setComplete(boolean isComplete) { this.isComplete = isComplete; }
     
-
+    //go back here 
+    /*
+    public int getDueDateAsInteger() {
+        try {
+            return Integer.parseInt(dueDate.replace("-", ""));
+        } catch (NumberFormatException e) {
+            System.err.println("Invalid date format: " + dueDate);
+            return Integer.MAX_VALUE;  // Return a large value in case of invalid date
+        }
+    }
+    */
+    
     @Override
     public String toString() {
         return String.format("\n Title: %-20s \n Description: %s \n Due Date: %s \n Category: %s \n Priority: %s \n Complete: %b",
