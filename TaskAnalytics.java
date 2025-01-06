@@ -1,71 +1,51 @@
 import java.util.*;
 
 public class TaskAnalytics {
+    private List<Task> tasks;
 
-    // Task class
-    static class Task {
-        String title;
-        boolean isComplete;
-        String category;
-
-        public Task(String title, boolean isComplete, String category) {
-            this.title = title;
-            this.isComplete = isComplete;
-            this.category = category;
-        }
+    public TaskAnalytics(List<Task> tasks) {
+        this.tasks = tasks;
     }
 
-    private List<Task> taskList;
-
-    public TaskAnalytics() {
-        this.taskList = new ArrayList<>();
-    }
-
-    /* Method to add a task
-    public void addTask(String title, boolean isComplete, String category) {
-        taskList.add(new Task(title, isComplete, category));
-    } */
-
-    // Analytics method to calculate and display task completion stats
     public void displayAnalytics() {
         int completedTasks = 0;
-        int totalTasks = taskList.size();
+        int totalTasks = tasks.size();
         Map<String, Integer> categoryCounts = new HashMap<>();
 
-        for (Task task : taskList) {
-            if (task.isComplete) {
+        for (Task task : tasks) {
+            if (task.isComplete()) {
                 completedTasks++;
             }
-            categoryCounts.put(task.category, categoryCounts.getOrDefault(task.category, 0) + 1);
+            // Normalize category to lowercase for case-insensitive grouping
+            String normalizedCategory = task.getCategory().toLowerCase();
+            categoryCounts.put(normalizedCategory, categoryCounts.getOrDefault(normalizedCategory, 0) + 1);
         }
 
         int pendingTasks = totalTasks - completedTasks;
         double completionRate = totalTasks > 0 ? ((double) completedTasks / totalTasks) * 100 : 0;
 
-        System.out.println("\n=== Analytics Dashboard ===");
+        System.out.println("\n—— Analytics Dashboard ——");
         System.out.println("Total Tasks: " + totalTasks);
         System.out.println("Completed: " + completedTasks);
         System.out.println("Pending: " + pendingTasks);
         System.out.println("Completion Rate: " + String.format("%.2f", completionRate) + "%");
 
-        System.out.println("\nTask Categories:");
+        // Format Task Categories in a single line
+        System.out.print("Task Categories: ");
+        List<String> formattedCategories = new ArrayList<>();
         for (Map.Entry<String, Integer> entry : categoryCounts.entrySet()) {
-            System.out.println(entry.getKey() + ": " + entry.getValue());
+            // Capitalize the first letter of each category for display
+            String formattedCategory = capitalize(entry.getKey()) + ": " + entry.getValue();
+            formattedCategories.add(formattedCategory);
         }
+        System.out.println(String.join(", ", formattedCategories));
     }
 
-    /*
-    public static void main(String[] args) {
-        TaskAnalytics manager = new TaskAnalytics();
-
-        // Sample tasks
-        manager.addTask("Complete Java Project", false, "Work");
-        manager.addTask("Grocery Shopping", true, "Personal");
-        manager.addTask("Read Book", false, "Hobby");
-        manager.addTask("Workout", true, "Health");
-
-        // Display analytics
-        manager.displayAnalytics();
+    // Utility method to capitalize the first letter of a word
+    private String capitalize(String word) {
+        if (word == null || word.isEmpty()) {
+            return word;
+        }
+        return word.substring(0, 1).toUpperCase() + word.substring(1);
     }
-    */
 }
