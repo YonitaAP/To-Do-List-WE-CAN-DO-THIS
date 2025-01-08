@@ -1,45 +1,55 @@
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
-import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+public class RecurringTask {
+    private String title;
+    private String description;
+    private String recurrenceInterval;
+    private String nextDueDate;
 
-public class RecurringTaskStorage {
-    private static final String FILE_NAME = "recurring_tasks.csv";
+    public RecurringTask(String title, String description, String recurrenceInterval) {
+        this.title = title;
+        this.description = description;
+        this.recurrenceInterval = recurrenceInterval.toLowerCase();
+        this.nextDueDate = calculateNextDueDate(LocalDate.now()); // Set initial due date
+    }
 
-    public void saveRecurringTasks(List<RecurringTask> recurringTasks) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME))) {
-            for (RecurringTask task : recurringTasks) {
-                String line = String.format("%s,%s,%s",
-                        task.getTitle(), task.getDescription(), task.getRecurrenceInterval());
-                writer.write(line);
-                writer.newLine();
-            }
-            System.out.println("\nRecurring tasks saved successfully!");
-        } catch (IOException e) {
-            System.err.println("\nError saving recurring tasks: " + e.getMessage());
+    public String getTitle() {
+        return title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getRecurrenceInterval() {
+        return recurrenceInterval;
+    }
+
+    public String getNextDueDate() {
+        return nextDueDate;
+    }
+
+    public void updateNextDueDate() {
+        LocalDate currentDueDate = LocalDate.parse(nextDueDate);
+        this.nextDueDate = calculateNextDueDate(currentDueDate);
+    }
+
+    private String calculateNextDueDate(LocalDate startDate) {
+        switch (recurrenceInterval) {
+            case "daily":
+                return startDate.plusDays(1).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            case "weekly":
+                return startDate.plusWeeks(1).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            case "monthly":
+                return startDate.plusMonths(1).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            default:
+                throw new IllegalArgumentException("Invalid recurrence interval: " + recurrenceInterval);
         }
     }
 
-    public List<RecurringTask> loadRecurringTasks() {
-        List<RecurringTask> recurringTasks = new ArrayList<>();
-        File file = new File(FILE_NAME);
-
-        if (!file.exists()) {
-            System.out.println("No existing recurring tasks file found.");
-            return recurringTasks;
-        }
-
-        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_NAME))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",", 3); // Split into 3 parts
-                RecurringTask task = new RecurringTask(parts[0], parts[1], parts[2]);
-                recurringTasks.add(task);
-            }
-        } catch (IOException e) {
-            System.err.println("Error loading recurring tasks: " + e.getMessage());
-        }
-
-        return recurringTasks;
+    @Override
+    public String toString() {
+        return String.format(" %s | %s - Recurrence Interval: %s", title, description, recurrenceInterval);
     }
 }
