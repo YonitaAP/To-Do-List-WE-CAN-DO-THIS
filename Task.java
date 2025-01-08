@@ -45,8 +45,8 @@ public class Task {
     @Override
     public String toString() {
         return String.format(
-            "\nTitle: %-20s\nDescription: %-15s\nDue Date: %s\nCategory: %-10s\nPriority: %s \n[%s]",
-            title, description, dueDate, category,priority,isComplete ? "Complete" : "Incomplete");
+            "[%s] %s | %s - Due: %s - Category: %s - Priority: %s",
+            isComplete ? "Complete" : "Incomplete", title, description, dueDate, category,priority);
     }
 
 }
