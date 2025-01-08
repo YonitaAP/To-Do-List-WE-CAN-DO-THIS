@@ -1,54 +1,45 @@
 
+import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
-public class RecurringTask {
-    private List<Task> tasks;
+public class RecurringTaskStorage {
+    private static final String FILE_NAME = "recurring_tasks.csv";
 
-    public RecurringTask(List<Task> tasks) {
-        this.tasks = tasks;
+    public void saveRecurringTasks(List<RecurringTask> recurringTasks) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME))) {
+            for (RecurringTask task : recurringTasks) {
+                String line = String.format("%s,%s,%s",
+                        task.getTitle(), task.getDescription(), task.getRecurrenceInterval());
+                writer.write(line);
+                writer.newLine();
+            }
+            System.out.println("\nRecurring tasks saved successfully!");
+        } catch (IOException e) {
+            System.err.println("\nError saving recurring tasks: " + e.getMessage());
+        }
     }
 
-    public void addRecurringTask(Scanner scanner) {
-        System.out.print("Enter task title: ");
-        String title = scanner.nextLine();
+    public List<RecurringTask> loadRecurringTasks() {
+        List<RecurringTask> recurringTasks = new ArrayList<>();
+        File file = new File(FILE_NAME);
 
-        System.out.print("Enter task description: ");
-        String description = scanner.nextLine();
-
-        System.out.print("Enter due date (YYYY-MM-DD): ");
-        String dueDate = scanner.nextLine();
-        while (!dueDate.matches("\\d{4}-\\d{2}-\\d{2}")) {
-            System.out.print("Invalid format. Enter due date (YYYY-MM-DD): ");
-            dueDate = scanner.nextLine();
+        if (!file.exists()) {
+            System.out.println("No existing recurring tasks file found.");
+            return recurringTasks;
         }
 
-        System.out.print("Enter task category (Homework, Personal, Work): ");
-        String category = scanner.nextLine();
-
-        System.out.print("Enter priority level (Low, Medium, High): ");
-        String priority = scanner.nextLine();
-        while (!priority.equalsIgnoreCase("Low") &&
-                !priority.equalsIgnoreCase("Medium") &&
-                !priority.equalsIgnoreCase("High")) {
-            System.out.print("Invalid priority. Enter 'Low', 'Medium', or 'High': ");
-            priority = scanner.nextLine();
+        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_NAME))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",", 3); // Split into 3 parts
+                RecurringTask task = new RecurringTask(parts[0], parts[1], parts[2]);
+                recurringTasks.add(task);
+            }
+        } catch (IOException e) {
+            System.err.println("Error loading recurring tasks: " + e.getMessage());
         }
 
-        System.out.print("Enter recurrence interval (daily, weekly, monthly): ");
-        String interval = scanner.nextLine().toLowerCase();
-        while (!interval.equals("daily") &&
-                !interval.equals("weekly") &&
-                !interval.equals("monthly")) {
-            System.out.print("Invalid interval. Enter 'daily', 'weekly', or 'monthly': ");
-            interval = scanner.nextLine().toLowerCase();
-        }
-
-        Task recurringTask = new Task(title, description, dueDate, category, priority, false);
-        tasks.add(recurringTask);
-        System.out.println("\nRecurring Task \"" + title + "\" added successfully!");
-
-        // Add logic to manage automatic recurrence generation?
+        return recurringTasks;
     }
-    
 }
