@@ -13,33 +13,26 @@ public class TaskAnalytics {
         Map<String, Integer> categoryCounts = new HashMap<>();
 
         for (Task task : tasks) {
-            if (task.isComplete()) {
-                completedTasks++;
-            }
-            // Normalize category to lowercase for case-insensitive grouping
+            if (task.isComplete()) completedTasks++;
             String normalizedCategory = task.getCategory().toLowerCase();
             categoryCounts.put(normalizedCategory, categoryCounts.getOrDefault(normalizedCategory, 0) + 1);
         }
 
-        int pendingTasks = totalTasks - completedTasks;
-        double completionRate = totalTasks > 0 ? ((double) completedTasks / totalTasks) * 100 : 0;
-
-        System.out.println("\n—— Analytics Dashboard ——");
+        System.out.println("╔═══════════════════════════════╗");
+        System.out.println("║    ★ Analytics Dashboard ★    ║");
+        System.out.println("╚═══════════════════════════════╝");
         System.out.println("Total Tasks: " + totalTasks);
         System.out.println("Completed: " + completedTasks);
-        System.out.println("Pending: " + pendingTasks);
-        System.out.println("Completion Rate: " + String.format("%.2f", completionRate) + "%");
+        System.out.println("Pending: " + (totalTasks - completedTasks));
+        System.out.println("Completion Rate: " + (totalTasks > 0 ? String.format("%.2f", (double) completedTasks / totalTasks * 100) : "0") + "%");
 
-        // Format Task Categories in a single line
-        System.out.print("Task Categories: ");
-        List<String> formattedCategories = new ArrayList<>();
-        for (Map.Entry<String, Integer> entry : categoryCounts.entrySet()) {
-            // Capitalize the first letter of each category for display
-            String formattedCategory = capitalize(entry.getKey()) + ": " + entry.getValue();
-            formattedCategories.add(formattedCategory);
-        }
-        System.out.println(String.join(", ", formattedCategories));
+        // Display Categories on separate lines
+        System.out.println("Task Categories:");
+        categoryCounts.forEach((category, count) -> 
+            System.out.println("  - " + capitalize(category) + ": " + count)
+        );
     }
+
 
     // Utility method to capitalize the first letter of a word
     private String capitalize(String word) {
