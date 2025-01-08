@@ -11,12 +11,16 @@ public class SearchSortTasks {
 
     // Methods to handle sorting directly
     public void SortTasks(Scanner scanner) {
-        System.out.println("Sort by:");
-        System.out.println("1. Due Date (Ascending)");
-        System.out.println("2. Due Date (Descending)");
-        System.out.println("3. Priority (High to Low)");
-        System.out.println("4. Priority (Low to High)");
-        System.out.print("Enter your choice: ");
+        System.out.println("╔══════════════════════════════╗");
+        System.out.println("║         ★ Sort by ★          ║");
+        System.out.println("╠══════════════════════════════╣");
+        System.out.println("║  1. Due Date (Ascending)     ║");
+        System.out.println("║  2. Due Date (Descending)    ║");
+        System.out.println("║  3. Priority (High to Low)   ║");
+        System.out.println("║  4. Priority (Low to High)   ║");
+        System.out.println("╚══════════════════════════════╝");
+        System.out.print("☆ Enter your choice: ");
+
         int sortChoice = scanner.nextInt();
 
         switch (sortChoice) {
@@ -38,12 +42,16 @@ public class SearchSortTasks {
     }
 
     public void SearchTasks(Scanner scanner) {
-        System.out.println("\nSearch by:");
-        System.out.println("1. Title");
-        System.out.println("2. Category");
-        System.out.print("Enter your choice: ");
+        System.out.println("╔═══════════════════════════╗");
+        System.out.println("║       ★ Search by ★       ║");
+        System.out.println("╠═══════════════════════════╣");
+        System.out.println("║ 1. Title                  ║");
+        System.out.println("║ 2. Category               ║");
+        System.out.println("╚═══════════════════════════╝");
+        System.out.print("☆ Enter your choice: ");
         int searchChoice = scanner.nextInt();
-        scanner.nextLine(); // Consume newline
+        scanner.nextLine(); 
+
 
         switch (searchChoice) {
             case 1:
@@ -64,25 +72,37 @@ public class SearchSortTasks {
     // Sorting methods
     public void sortTasksByDueDateAscending() {
         tasks.sort(Comparator.comparingInt(Task::getDueDateAsInteger));
-        System.out.println("\nTasks sorted by due date (ascending):");
+        System.out.println();
+        System.out.println("╔════════════════════════════════════════╗");
+        System.out.println("║  Tasks sorted by due date (ascending)  ║");
+        System.out.println("╚════════════════════════════════════════╝");
         printTasks();
     }
 
     public void sortTasksByDueDateDescending() {
         tasks.sort((task1, task2) -> Integer.compare(task2.getDueDateAsInteger(), task1.getDueDateAsInteger()));
-        System.out.println("\nTasks sorted by due date (descending):");
+        System.out.println();        
+        System.out.println("╔════════════════════════════════════════╗");
+        System.out.println("║  Tasks sorted by due date (descending) ║");
+        System.out.println("╚════════════════════════════════════════╝");
         printTasks();
     }
 
     public void sortTasksByPriorityHighToLow() {
         tasks.sort((task1, task2) -> Integer.compare(mapPriorityToValue(task2.getPriority()), mapPriorityToValue(task1.getPriority())));
-        System.out.println("\nTasks sorted by priority (high to low):");
+        System.out.println();
+        System.out.println("╔════════════════════════════════════════╗");
+        System.out.println("║ Tasks sorted by priority (high to low) ║");
+        System.out.println("╚════════════════════════════════════════╝");
         printTasks();
     }
 
     public void sortTasksByPriorityLowToHigh() {
         tasks.sort((task1, task2) -> Integer.compare(mapPriorityToValue(task1.getPriority()), mapPriorityToValue(task2.getPriority())));
-        System.out.println("\nTasks sorted by priority (low to high):");
+        System.out.println();
+        System.out.println("╔════════════════════════════════════════╗");
+        System.out.println("║ Tasks sorted by priority (low to high) ║");
+        System.out.println("╚════════════════════════════════════════╝");        
         printTasks();
     }
 
