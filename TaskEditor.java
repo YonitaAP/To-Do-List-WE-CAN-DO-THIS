@@ -15,7 +15,7 @@ public class TaskEditor {
         }
 
         for (int i = 0; i < tasks.size(); i++) {
-            System.out.println("\nTask " + (i + 1) + tasks.get(i));
+            System.out.println((i + 1) + ". " + tasks.get(i));
         }
 
         System.out.print("\nEnter the task number to edit: ");
@@ -29,14 +29,19 @@ public class TaskEditor {
 
         Task task = tasks.get(taskNumber - 1);
 
-        System.out.println("\nWhat would you like to edit?");
-        System.out.println("1. Title");
-        System.out.println("2. Description");
-        System.out.println("3. Due Date");
-        System.out.println("4. Category");
-        System.out.println("5. Priority");
-        System.out.println("6. Cancel");
-        System.out.print("Enter your choice: ");
+        System.out.println();
+        System.out.println("╔═════════════════════════════════════╗");
+        System.out.println("║   ★ What would you like to edit? ★  ║");
+        System.out.println("╠═════════════════════════════════════╣");
+        System.out.println("║  1. Title                           ║");
+        System.out.println("║  2. Description                     ║");
+        System.out.println("║  3. Due Date                        ║");
+        System.out.println("║  4. Category                        ║");
+        System.out.println("║  5. Priority                        ║");
+        System.out.println("║  6. Cancel                          ║");
+        System.out.println("╚═════════════════════════════════════╝");
+        System.out.print("☆ Enter your choice: ");
+
         int choice = scanner.nextInt();
         scanner.nextLine(); // Consume newline
 
