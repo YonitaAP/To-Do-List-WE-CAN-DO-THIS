@@ -114,16 +114,16 @@ Completed & run:
 - Edit task (1)
 - Extra feature (Data analytics) (1)
 
-- Recurring tasks - runs, but still needs some work 
 
-Completed:
+
+TO-DO
+- Recurring tasks - runs, but doesn't fulfill function
 - Task dependencies (2)
-
-Pending:
-- Extra feature(GUI) (2)
 - Extra feature (Email notif) (1)
+
+
  
-NOTES
+NOTES (ignore aja wkwk)
 - Mark task as incomplete
 - Go back to view all tasks after task is changed?
 - clear the output after a command is done
@@ -131,4 +131,5 @@ NOTES
 - add task dependencies in edit task
 - recurring task not rly working as intended
 - add options to cancel in: add task, mask task as complete, delete task, add recurring tasks
+- comparator nono
 */
