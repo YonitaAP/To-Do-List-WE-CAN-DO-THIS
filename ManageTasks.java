@@ -1,8 +1,8 @@
 import java.util.*;
 
 public class ManageTasks {
-    private List<Task> tasks; // Regular tasks
-    private List<RecurringTask> recurringTasks; // Recurring tasks
+    private List<Task> tasks; 
+    private List<RecurringTask> recurringTasks;
     private RecurringTaskStorage recurringTaskStorage;
 
     public ManageTasks(List<Task> tasks, List<RecurringTask> recurringTasks, RecurringTaskStorage recurringTaskStorage) {
@@ -10,7 +10,6 @@ public class ManageTasks {
         this.recurringTasks = recurringTasks;
         this.recurringTaskStorage = recurringTaskStorage;
     }
-
 
     public void addTaskMenu(Scanner scanner) {
            System.out.println("╔══════════════════════════╗");
@@ -25,7 +24,7 @@ public class ManageTasks {
         int choice = scanner.nextInt();
         System.out.println();
 
-        scanner.nextLine(); // Consume newline
+        scanner.nextLine(); 
 
         switch (choice) {
             case 1:
@@ -39,7 +38,6 @@ public class ManageTasks {
         }
     }
 
-    // Add a regular task
     public void addTask(Scanner scanner) {
         String title, description, dueDate, category, priority;
         List<String> dependencies = new ArrayList<>();
@@ -53,12 +51,11 @@ public class ManageTasks {
         System.out.print("Enter task description: ");
         description = scanner.nextLine();
 
-        // Validate due date input
         while (true) {
             System.out.print("Enter due date (YYYY-MM-DD): ");
             dueDate = scanner.nextLine();
             if (dueDate.matches("\\d{4}-\\d{2}-\\d{2}")) {
-                break; // Valid date
+                break; 
             } else {
                 System.out.println("Invalid due date format. Please use YYYY-MM-DD.");
             }
@@ -67,7 +64,6 @@ public class ManageTasks {
         System.out.print("Enter task category (Homework, Personal, Work, etc.): ");
         category = scanner.nextLine();
 
-        // Validate priority input
         while (true) {
             System.out.print("Enter priority level (Low, Medium, High): ");
             priority = scanner.nextLine();
@@ -95,7 +91,6 @@ public class ManageTasks {
         System.out.print("Enter recurring task description: ");
         description = scanner.nextLine();
 
-    // Validate recurrence interval input
         while (true) {
             System.out.print("Enter recurrence interval (daily, weekly, monthly): ");
             recurrenceInterval = scanner.nextLine().toLowerCase();
@@ -106,7 +101,6 @@ public class ManageTasks {
             }
         }
 
-    // Create and save the recurring task
         RecurringTask recurringTask = new RecurringTask(title, description, recurrenceInterval);
         recurringTasks.add(recurringTask);
     // Automatically create a regular task for the initial recurrence
@@ -128,10 +122,9 @@ public class ManageTasks {
     }
 
     public void handleRecurringTaskCompletion(RecurringTask recurringTask) {
-        // Update the next due date for the recurring task
+        // Update  next due date for the recurring task
         recurringTask.updateNextDueDate();
 
-        // Create a new regular task for the next recurrence
         Task newTask = new Task(
         recurringTask.getTitle(), 
         recurringTask.getDescription(), 
@@ -139,7 +132,7 @@ public class ManageTasks {
         recurringTask.getRecurrenceInterval() + " recurrence", 
         "Medium", 
         false, 
-        new ArrayList<>() // No dependencies for the new task initially
+        new ArrayList<>() 
     );
 
 
@@ -162,7 +155,7 @@ public class ManageTasks {
         System.out.print("☆ Enter your choice: ");
 
         int choice = scanner.nextInt();
-        scanner.nextLine(); // Consume newline
+        scanner.nextLine();
 
         switch (choice) {
             case 1:
@@ -176,7 +169,6 @@ public class ManageTasks {
         }
     }
 
-    // Delete a regular task
     public void deleteTask(Scanner scanner) {
         if (tasks.isEmpty()) {
             System.out.println("\nNo tasks available to delete.");
@@ -201,7 +193,6 @@ public class ManageTasks {
         }
     }
 
-    // Delete a recurring task
     public void removeRecurringTask(Scanner scanner) {
         if (recurringTasks.isEmpty()) {
             System.out.println("\nNo recurring tasks available to delete.");
@@ -224,7 +215,6 @@ public class ManageTasks {
             RecurringTask removedTask = recurringTasks.remove(taskNumber - 1);
             System.out.println("\nRecurring task \"" + removedTask.getTitle() + "\" deleted successfully!");
 
-            // Save updated recurring tasks to file
             recurringTaskStorage.saveRecurringTasks(recurringTasks);
         } else {
             System.out.println("\nInvalid recurring task number.");
@@ -237,8 +227,8 @@ public class ManageTasks {
             return;
         }
         
-        System.out.println("\n╔════════════════════════════╗");
-        System.out.println("║   View All Regular Tasks   ║");
+        System.out.println("╔════════════════════════════╗");
+        System.out.println("║  ★ Mark Task as Complete ★ ║");
         System.out.println("╚════════════════════════════╝");
         
         for (int i = 0; i < tasks.size(); i++) {
@@ -262,7 +252,6 @@ public class ManageTasks {
             return;
             }
 
-            // Check for unresolved dependencies
             List<String> dependencies = task.getDependencies();
             if (!dependencies.isEmpty()) {
                 for (String dependencyTitle : dependencies) {
@@ -277,11 +266,9 @@ public class ManageTasks {
                 }
             }
 
-            // Mark task as complete
             task.setComplete(true);
             System.out.println("\nTask \"" + task.getTitle() + "\" marked as complete!");
 
-            // Check if task belongs to a recurring task and handle it
             for (RecurringTask recurringTask : recurringTasks) {
                 if (recurringTask.getTitle().equalsIgnoreCase(task.getTitle())) {
                     handleRecurringTaskCompletion(recurringTask);
@@ -299,8 +286,8 @@ public class ManageTasks {
             return;
         }
 
-        System.out.println("\n╔════════════════════════════╗");
-        System.out.println("║   View All Regular Tasks   ║");
+        System.out.println("╔════════════════════════════╗");
+        System.out.println("║    ★ Mark as Incomplete ★  ║");
         System.out.println("╚════════════════════════════╝");
 
         for (int i = 0; i < tasks.size(); i++) {
@@ -333,11 +320,9 @@ public class ManageTasks {
                 }
             }
 
-            // Mark task as incomplete
             task.setComplete(false);
             System.out.println("\nTask \"" + task.getTitle() + "\" marked as incomplete!");
 
-            // Check if task belongs to a recurring task and handle it
             for (RecurringTask recurringTask : recurringTasks) {
                 if (recurringTask.getTitle().equalsIgnoreCase(task.getTitle())) {
                     System.out.println("Note: Marking a recurring task's instance incomplete does not affect the recurrence schedule.");
@@ -351,4 +336,3 @@ public class ManageTasks {
 
 }
     
-
