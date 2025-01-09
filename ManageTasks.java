@@ -104,7 +104,7 @@ public class ManageTasks {
 
         // Validate next due date input
         while (true) {
-            System.out.print("Enter first recurrence date (YYYY-MM-DD): ");
+            System.out.print("Enter first occurrance date (YYYY-MM-DD): ");
             nextDueDate = scanner.nextLine();
             if (nextDueDate.matches("\\d{4}-\\d{2}-\\d{2}")) {
                 break; // Valid date
@@ -130,7 +130,7 @@ public class ManageTasks {
         tasks.add(regularTask);
 
         System.out.println("\nRecurring task \"" + title + "\" added successfully!");
-        System.out.println("Regular task created for the first recurrence.");
+        System.out.println("Regular task created for the first occurrence.");
 
         recurringTaskStorage.saveRecurringTasks(recurringTasks);
     }
@@ -152,7 +152,7 @@ public class ManageTasks {
 
 
             tasks.add(newTask);
-            System.out.println("\nNew regular task created for the next recurrence: " + newTask.getDueDate());
+            System.out.println("\nNew regular task created for the next occurrence: " + newTask.getDueDate());
 
             recurringTaskStorage.saveRecurringTasks(recurringTasks);
         }
@@ -252,7 +252,7 @@ public class ManageTasks {
 
         System.out.print("Enter the task number to mark as complete (or 0 to cancel): ");
         int taskNumber = scanner.nextInt();
-        scanner.nextLine(); // Consume newline
+        scanner.nextLine(); 
         
         if (taskNumber == 0) {
                     System.out.println("Returning to the main menu.");
@@ -311,7 +311,7 @@ public class ManageTasks {
 
         System.out.print("Enter the task number to mark as incomplete (or 0 to cancel): ");
         int taskNumber = scanner.nextInt();
-        scanner.nextLine(); // Consume newline
+        scanner.nextLine(); 
 
         if (taskNumber == 0) {
             System.out.println("Returning to the main menu.");
@@ -326,7 +326,6 @@ public class ManageTasks {
                 return;
             }
 
-            // Reverse check for dependencies (if needed)
             for (Task dependentTask : tasks) {
                 List<String> dependencies = dependentTask.getDependencies();
                 if (dependencies.contains(task.getTitle()) && dependentTask.isComplete()) {
