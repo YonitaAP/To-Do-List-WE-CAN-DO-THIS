@@ -1,7 +1,4 @@
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class ToDoListApp {
     private static List<Task> tasks = new ArrayList<>();
@@ -14,6 +11,7 @@ public class ToDoListApp {
     private static RecurringTask recurringTask;
     private static ManageTasks manageTasks;
     private static TaskAnalytics taskAnalytics;
+    private static Map<Integer, Integer> dependencies = new HashMap<>();
     
 
     public static void main(String[] args) {
@@ -24,12 +22,14 @@ public class ToDoListApp {
         manageTasks = new ManageTasks(tasks, recurringTasks, recurringTaskStorage);
         taskAnalytics = new TaskAnalytics(tasks);
         viewTasks = new ViewTasks(tasks, recurringTasks);
+        
 // Initialize viewTasks
 
         Scanner scanner = new Scanner(System.in);
         int choice;
 
-        do {
+        while(true) {
+            try {
                System.out.println("\n╔═══════════════════════════╗");
                System.out.println("║   ☆ To-Do List Menu ☆     ║");
                System.out.println("╠═══════════════════════════╣");
@@ -46,55 +46,56 @@ public class ToDoListApp {
                System.out.println("╚═══════════════════════════╝");
                System.out.print("☆ Enter your choice: ");
 
-            choice = scanner.nextInt();
-            scanner.nextLine(); // Consume newline
-            System.out.println();
+                choice = scanner.nextInt();
+                scanner.nextLine(); // Consume newline
+                System.out.println();
 
-            switch (choice) {
-                case 1:
-                    manageTasks.addTaskMenu(scanner);
-                    break;
-                case 2:
-                    viewTasks.displayTasks();
-                    break;
-                case 3:
-                    manageTasks.markTaskComplete(scanner);
-                    break;
-                case 4:
-                    manageTasks.deleteTaskMenu(scanner);
-                    break;
-                case 5:
-                    searchSortTasks.SortTasks(scanner);
-                    break;
-                case 6:
-                    searchSortTasks.SearchTasks(scanner);
-                    break;
-                case 7:
-                    taskEditor.editTask(scanner);
-                    break;
-                case 8:
-                    taskAnalytics.displayAnalytics();
-                    break;
-                case 9:
-                    taskStorage.saveTasks(tasks); // Save regular tasks to CSV
-                    recurringTaskStorage.saveRecurringTasks(recurringTasks); // Save recurring tasks to CSV
-                    System.out.println("Exiting program.");
-                    break;
-                default:
-                    System.out.println("\nInvalid choice. Please try again.");
+                switch (choice) {
+                    case 1:
+                        manageTasks.addTaskMenu(scanner);
+                        break;
+                    case 2:
+                        viewTasks.displayTasks();
+                        break;
+                    case 3:
+                        manageTasks.markTaskComplete(scanner);
+                        break;
+                    case 4:
+                        manageTasks.deleteTaskMenu(scanner);
+                        break;
+                    case 5:
+                        searchSortTasks.SortTasks(scanner);
+                        break;
+                    case 6:
+                        searchSortTasks.SearchTasks(scanner);
+                        break;
+                    case 7:
+                        taskEditor.editTask(scanner);
+                        break;
+                    case 8:
+                        taskAnalytics.displayAnalytics();
+                        break;
+                    case 9:
+                        taskStorage.saveTasks(tasks); // Save regular tasks to CSV
+                        recurringTaskStorage.saveRecurringTasks(recurringTasks); // Save recurring tasks to CSV
+                        System.out.println("Exiting program.");
+                        break;
+                    default:
+                        System.out.println("\nInvalid choice. Please enter a number between 1 and 9.");
+                }
+            } catch (InputMismatchException e) {
+            System.out.println("\nError: Please enter a valid number.");
+            scanner.nextLine(); // Clear the invalid input
             }
-        } while (choice != 9);
+        } 
 
-        scanner.close();
     }
 }
-
-
 
 /*
 PROGRESS
 
-Completed & run:
+//Completed & run:
 - Storage system (1/2)
 - Data load state (1/2)
 - Task creation (1)
@@ -105,6 +106,7 @@ Completed & run:
 - Edit task (1)
 - Extra feature (Data analytics) (1)
 - Recurring tasks (1)
+- 
 
 TO-DO
 - Task dependencies (2)
@@ -116,7 +118,6 @@ TO-DO
 NOTES
 
 yonita:
-- error handling if input is not integer
 - add task dependencies in edit task
 
 
