@@ -80,8 +80,8 @@ public class ManageTasks {
 
     
     public void addRecurringTask(Scanner scanner) {
-        String title, description, recurrenceInterval;
-        
+        String title, description, recurrenceInterval, nextDueDate;
+
         System.out.println("╔══════════════════════════╗");
         System.out.println("║   ★ Task Information ★   ║");
         System.out.println("╚══════════════════════════╝");
@@ -91,6 +91,7 @@ public class ManageTasks {
         System.out.print("Enter recurring task description: ");
         description = scanner.nextLine();
 
+        // Validate recurrence interval input
         while (true) {
             System.out.print("Enter recurrence interval (daily, weekly, monthly): ");
             recurrenceInterval = scanner.nextLine().toLowerCase();
@@ -101,9 +102,22 @@ public class ManageTasks {
             }
         }
 
-        RecurringTask recurringTask = new RecurringTask(title, description, recurrenceInterval);
+        // Validate next due date input
+        while (true) {
+            System.out.print("Enter first recurrence date (YYYY-MM-DD): ");
+            nextDueDate = scanner.nextLine();
+            if (nextDueDate.matches("\\d{4}-\\d{2}-\\d{2}")) {
+                break; // Valid date
+            } else {
+                System.out.println("Invalid date format. Please use YYYY-MM-DD.");
+            }
+        }
+
+        // Create and save the recurring task
+        RecurringTask recurringTask = new RecurringTask(title, description, recurrenceInterval, nextDueDate);
         recurringTasks.add(recurringTask);
-    // Automatically create a regular task for the initial recurrence
+
+        // Automatically create a regular task for the first recurrence
         Task regularTask = new Task(
             title, 
             description, 
@@ -111,36 +125,37 @@ public class ManageTasks {
             recurrenceInterval + " recurrence", 
             "Medium", 
             false, 
-            new ArrayList<>() // No dependencies initially
+            new ArrayList<>() 
         );
-        
         tasks.add(regularTask);
+
         System.out.println("\nRecurring task \"" + title + "\" added successfully!");
-        System.out.println("\nRegular task created for the first recurrence.");
+        System.out.println("Regular task created for the first recurrence.");
 
         recurringTaskStorage.saveRecurringTasks(recurringTasks);
     }
 
-    public void handleRecurringTaskCompletion(RecurringTask recurringTask) {
-        // Update  next due date for the recurring task
-        recurringTask.updateNextDueDate();
 
-        Task newTask = new Task(
-        recurringTask.getTitle(), 
-        recurringTask.getDescription(), 
-        recurringTask.getNextDueDate(), 
-        recurringTask.getRecurrenceInterval() + " recurrence", 
-        "Medium", 
-        false, 
-        new ArrayList<>() 
-    );
+        public void handleRecurringTaskCompletion(RecurringTask recurringTask) {
+            // Update  next due date for the recurring task
+            recurringTask.updateNextDueDate();
+
+            Task newTask = new Task(
+            recurringTask.getTitle(), 
+            recurringTask.getDescription(), 
+            recurringTask.getNextDueDate(), 
+            recurringTask.getRecurrenceInterval() + " recurrence", 
+            "Medium", 
+            false, 
+            new ArrayList<>() 
+        );
 
 
-        tasks.add(newTask);
-        System.out.println("\nNew regular task created for the next recurrence: " + newTask.getDueDate());
+            tasks.add(newTask);
+            System.out.println("\nNew regular task created for the next recurrence: " + newTask.getDueDate());
 
-        recurringTaskStorage.saveRecurringTasks(recurringTasks);
-    }
+            recurringTaskStorage.saveRecurringTasks(recurringTasks);
+        }
 
 
     // Delete task menu
@@ -148,7 +163,7 @@ public class ManageTasks {
         System.out.println("╔═══════════════════════════╗");
         System.out.println("║     ★ Delete Task ★       ║");
         System.out.println("╠═══════════════════════════╣");
-        System.out.println("║  1. Delete Regular Task   ║");
+        System.out.println("║  1. Delete Single Task    ║");
         System.out.println("║  2. Delete Recurring Task ║");
         System.out.println("║  3. Back to Main Menu     ║"); 
         System.out.println("╚═══════════════════════════╝");
@@ -335,4 +350,3 @@ public class ManageTasks {
     }
 
 }
-    
