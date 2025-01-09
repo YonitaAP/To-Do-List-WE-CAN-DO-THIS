@@ -4,23 +4,21 @@ public class ManageTasks {
     private List<Task> tasks; // Regular tasks
     private List<RecurringTask> recurringTasks; // Recurring tasks
     private RecurringTaskStorage recurringTaskStorage;
-    private Map<Integer, Integer> dependencies;
 
     public ManageTasks(List<Task> tasks, List<RecurringTask> recurringTasks, RecurringTaskStorage recurringTaskStorage) {
         this.tasks = tasks;
         this.recurringTasks = recurringTasks;
         this.recurringTaskStorage = recurringTaskStorage;
-        this.dependencies = new HashMap<>();;
     }
 
-    // Add task menu
+
     public void addTaskMenu(Scanner scanner) {
            System.out.println("╔══════════════════════════╗");
            System.out.println("║       ★ Add Task ★       ║");
            System.out.println("╠══════════════════════════╣");
            System.out.println("║  1. Add Regular Task     ║");
            System.out.println("║  2. Add Recurring Task   ║");
-           System.out.println("║  3. Back to Main Menu    ║");           
+           System.out.println("║  3. Cancel               ║");           
            System.out.println("╚══════════════════════════╝");
            System.out.print("☆ Enter your choice: ");
 
@@ -44,10 +42,12 @@ public class ManageTasks {
     // Add a regular task
     public void addTask(Scanner scanner) {
         String title, description, dueDate, category, priority;
+        List<String> dependencies = new ArrayList<>();
         
         System.out.println("╔══════════════════════════╗");
         System.out.println("║   ★ Task Information ★   ║");
         System.out.println("╚══════════════════════════╝");
+        
         System.out.print("Enter task title: ");
         title = scanner.nextLine();
         System.out.print("Enter task description: ");
@@ -78,9 +78,10 @@ public class ManageTasks {
             }
         }
 
-        tasks.add(new Task(title, description, dueDate, category, priority, false));
+        tasks.add(new Task(title, description, dueDate, category, priority, false, dependencies));
         System.out.println("\nTask \"" + title + "\" added successfully!");
     }
+
     
     public void addRecurringTask(Scanner scanner) {
         String title, description, recurrenceInterval;
@@ -108,10 +109,17 @@ public class ManageTasks {
     // Create and save the recurring task
         RecurringTask recurringTask = new RecurringTask(title, description, recurrenceInterval);
         recurringTasks.add(recurringTask);
-
     // Automatically create a regular task for the initial recurrence
-        Task regularTask = new Task(title, description, recurringTask.getNextDueDate(), 
-                                    recurrenceInterval + " recurrence","Medium", false);
+        Task regularTask = new Task(
+            title, 
+            description, 
+            recurringTask.getNextDueDate(), 
+            recurrenceInterval + " recurrence", 
+            "Medium", 
+            false, 
+            new ArrayList<>() // No dependencies initially
+        );
+        
         tasks.add(regularTask);
         System.out.println("\nRecurring task \"" + title + "\" added successfully!");
         System.out.println("\nRegular task created for the first recurrence.");
@@ -124,8 +132,16 @@ public class ManageTasks {
         recurringTask.updateNextDueDate();
 
         // Create a new regular task for the next recurrence
-        Task newTask = new Task(recurringTask.getTitle(), recurringTask.getDescription(), recurringTask.getNextDueDate(),
-        recurringTask.getRecurrenceInterval() + " recurrence", "Medium", false);
+        Task newTask = new Task(
+        recurringTask.getTitle(), 
+        recurringTask.getDescription(), 
+        recurringTask.getNextDueDate(), 
+        recurringTask.getRecurrenceInterval() + " recurrence", 
+        "Medium", 
+        false, 
+        new ArrayList<>() // No dependencies for the new task initially
+    );
+
 
         tasks.add(newTask);
         System.out.println("\nNew regular task created for the next recurrence: " + newTask.getDueDate());
@@ -141,6 +157,7 @@ public class ManageTasks {
         System.out.println("╠═══════════════════════════╣");
         System.out.println("║  1. Delete Regular Task   ║");
         System.out.println("║  2. Delete Recurring Task ║");
+        System.out.println("║  3. Back to Main Menu     ║"); 
         System.out.println("╚═══════════════════════════╝");
         System.out.print("☆ Enter your choice: ");
 
@@ -219,32 +236,50 @@ public class ManageTasks {
             System.out.println("\nNo tasks available to mark as complete.");
             return;
         }
-
-        System.out.println("\n—— View All Regular Tasks ——");
+        
+        System.out.println("\n╔════════════════════════════╗");
+        System.out.println("║   View All Regular Tasks   ║");
+        System.out.println("╚════════════════════════════╝");
+        
         for (int i = 0; i < tasks.size(); i++) {
             System.out.println("Task " + (i + 1) + ": " + tasks.get(i));
         }
 
-        System.out.print("Enter the task number to mark as complete: ");
+        System.out.print("Enter the task number to mark as complete (or 0 to cancel): ");
         int taskNumber = scanner.nextInt();
         scanner.nextLine(); // Consume newline
+        
+        if (taskNumber == 0) {
+                    System.out.println("Returning to the main menu.");
+                    return;
+        }
 
         if (taskNumber > 0 && taskNumber <= tasks.size()) {
             Task task = tasks.get(taskNumber - 1);
             
-            // Check for dependencies
-            Integer dependency = dependencies.get(taskNumber - 1); // Adjust index for 0-based IDs
-            if (dependency != null) {
-            Task dependentTask = tasks.get(dependency);
-                if (!dependentTask.isComplete()) {
-                    System.out.println("\nWarning: Task \"" + task.getTitle() + "\" cannot be marked as complete because it depends on \"" + dependentTask.getTitle() + "\".");
-                    return;
+            if (task.isComplete()) {
+            System.out.println("\nTask \"" + task.getTitle() + "\" is already incomplete.");
+            return;
+            }
+
+            // Check for unresolved dependencies
+            List<String> dependencies = task.getDependencies();
+            if (!dependencies.isEmpty()) {
+                for (String dependencyTitle : dependencies) {
+                    boolean isDependencyComplete = tasks.stream()
+                        .filter(t -> t.getTitle().equalsIgnoreCase(dependencyTitle))
+                        .allMatch(Task::isComplete);
+
+                    if (!isDependencyComplete) {
+                        System.out.println("\nTask \"" + task.getTitle() + "\" cannot be marked complete. Unresolved dependency: \"" + dependencyTitle + "\".");
+                        return;
+                    }
                 }
             }
 
             // Mark task as complete
             task.setComplete(true);
-            System.out.println("\nTask marked as complete!");
+            System.out.println("\nTask \"" + task.getTitle() + "\" marked as complete!");
 
             // Check if task belongs to a recurring task and handle it
             for (RecurringTask recurringTask : recurringTasks) {
@@ -258,4 +293,62 @@ public class ManageTasks {
         }
     }
     
+    public void markTaskIncomplete(Scanner scanner) {
+        if (tasks.isEmpty()) {
+            System.out.println("\nNo tasks available to mark as incomplete.");
+            return;
+        }
+
+        System.out.println("\n╔════════════════════════════╗");
+        System.out.println("║   View All Regular Tasks   ║");
+        System.out.println("╚════════════════════════════╝");
+
+        for (int i = 0; i < tasks.size(); i++) {
+            System.out.println("Task " + (i + 1) + ": " + tasks.get(i));
+        }
+
+        System.out.print("Enter the task number to mark as incomplete (or 0 to cancel): ");
+        int taskNumber = scanner.nextInt();
+        scanner.nextLine(); // Consume newline
+
+        if (taskNumber == 0) {
+            System.out.println("Returning to the main menu.");
+            return;
+        }
+
+        if (taskNumber > 0 && taskNumber <= tasks.size()) {
+            Task task = tasks.get(taskNumber - 1);
+
+            if (!task.isComplete()) {
+                System.out.println("\nTask \"" + task.getTitle() + "\" is already incomplete.");
+                return;
+            }
+
+            // Reverse check for dependencies (if needed)
+            for (Task dependentTask : tasks) {
+                List<String> dependencies = dependentTask.getDependencies();
+                if (dependencies.contains(task.getTitle()) && dependentTask.isComplete()) {
+                    System.out.println("\nTask \"" + task.getTitle() + "\" cannot be marked incomplete as it is a dependency for \"" + dependentTask.getTitle() + "\".");
+                    return;
+                }
+            }
+
+            // Mark task as incomplete
+            task.setComplete(false);
+            System.out.println("\nTask \"" + task.getTitle() + "\" marked as incomplete!");
+
+            // Check if task belongs to a recurring task and handle it
+            for (RecurringTask recurringTask : recurringTasks) {
+                if (recurringTask.getTitle().equalsIgnoreCase(task.getTitle())) {
+                    System.out.println("Note: Marking a recurring task's instance incomplete does not affect the recurrence schedule.");
+                    break;
+                }
+            }
+        } else {
+            System.out.println("\nInvalid task number.");
+        }
+    }
+
 }
+    
+
