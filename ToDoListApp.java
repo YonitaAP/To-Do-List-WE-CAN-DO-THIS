@@ -1,3 +1,4 @@
+
 import java.util.*;
 
 public class ToDoListApp {
@@ -11,7 +12,6 @@ public class ToDoListApp {
     private static RecurringTask recurringTask;
     private static ManageTasks manageTasks;
     private static TaskAnalytics taskAnalytics;
-    private static Map<Integer, Integer> dependencies = new HashMap<>();
     
 
     public static void main(String[] args) {
@@ -22,29 +22,29 @@ public class ToDoListApp {
         manageTasks = new ManageTasks(tasks, recurringTasks, recurringTaskStorage);
         taskAnalytics = new TaskAnalytics(tasks);
         viewTasks = new ViewTasks(tasks, recurringTasks);
-        
-// Initialize viewTasks
+
 
         Scanner scanner = new Scanner(System.in);
         int choice;
 
-        while(true) {
+        while (true) {
             try {
-               System.out.println("\n╔═══════════════════════════╗");
-               System.out.println("║   ☆ To-Do List Menu ☆     ║");
-               System.out.println("╠═══════════════════════════╣");
-               System.out.println("║  1. Add Task              ║");
-               System.out.println("║  2. View Tasks            ║");
-               System.out.println("║  3. Mark Task as Complete ║");
-               System.out.println("║  4. Delete Task           ║");
-               System.out.println("║  5. Sort Tasks            ║");
-               System.out.println("║  6. Search Tasks          ║");
-               System.out.println("║  7. Edit Task             ║");
-               System.out.println("║  8. Show Analytics        ║");
-               System.out.println("║  9. Save and Exit         ║");
-               System.out.println("╠═══════════════════════════╣");
-               System.out.println("╚═══════════════════════════╝");
-               System.out.print("☆ Enter your choice: ");
+                System.out.println("\n╔═════════════════════════════╗");
+                System.out.println("║    ☆ To-Do List Menu ☆      ║");
+                System.out.println("╠═════════════════════════════╣");
+                System.out.println("║  1. Add Task                ║");
+                System.out.println("║  2. View Tasks              ║");
+                System.out.println("║  3. Mark Task as Complete   ║");
+                System.out.println("║  4. Mark Task as Incomplete ║"); // New option
+                System.out.println("║  5. Delete Task             ║");
+                System.out.println("║  6. Sort Tasks              ║");
+                System.out.println("║  7. Search Tasks            ║");
+                System.out.println("║  8. Edit Task               ║");
+                System.out.println("║  9. Show Analytics          ║");
+                System.out.println("║  10. Save and Exit          ║");
+                System.out.println("╠═════════════════════════════╣");
+                System.out.println("╚═════════════════════════════╝");
+                System.out.print("☆ Enter your choice: ");
 
                 choice = scanner.nextInt();
                 scanner.nextLine(); // Consume newline
@@ -61,69 +61,44 @@ public class ToDoListApp {
                         manageTasks.markTaskComplete(scanner);
                         break;
                     case 4:
-                        manageTasks.deleteTaskMenu(scanner);
+                        manageTasks.markTaskIncomplete(scanner); // New case for marking incomplete
                         break;
                     case 5:
-                        searchSortTasks.SortTasks(scanner);
+                        manageTasks.deleteTaskMenu(scanner);
                         break;
                     case 6:
-                        searchSortTasks.SearchTasks(scanner);
+                        searchSortTasks.SortTasks(scanner);
                         break;
                     case 7:
-                        taskEditor.editTask(scanner);
+                        searchSortTasks.SearchTasks(scanner);
                         break;
                     case 8:
-                        taskAnalytics.displayAnalytics();
+                        taskEditor.editTask(scanner);
                         break;
                     case 9:
+                        taskAnalytics.displayAnalytics();
+                        break;
+                    case 10:
                         taskStorage.saveTasks(tasks); // Save regular tasks to CSV
                         recurringTaskStorage.saveRecurringTasks(recurringTasks); // Save recurring tasks to CSV
-                        System.out.println("Exiting program.");
-                        break;
+                        System.out.println("Tasks saved successfully. Exiting program.");
+                        return; // Terminate the program
                     default:
                         System.out.println("\nInvalid choice. Please enter a number between 1 and 9.");
                 }
             } catch (InputMismatchException e) {
-            System.out.println("\nError: Please enter a valid number.");
-            scanner.nextLine(); // Clear the invalid input
+                System.out.println("\nError: Please enter a valid number.");
+                scanner.nextLine(); 
             }
-        } 
-
+        }
     }
+
 }
 
+
 /*
-PROGRESS
-
-//Completed & run:
-- Storage system (1/2)
-- Data load state (1/2)
-- Task creation (1)
-- Task deletion  (1/2)
-- Task searching (1/2)
-- Mark as complete (1/2)
-- Task Sorting (1/2)
-- Edit task (1)
-- Extra feature (Data analytics) (1)
-- Recurring tasks (1)
-- 
-
-TO-DO
-- Task dependencies (2)
+This
 - Extra feature (Email notif) (1)
 - GUI (2)
-
-
- 
-NOTES
-
-yonita:
-- add task dependencies in edit task
-
-
-cita:
-- option to cancel
-- search task by description
-- do i need next due date csv? test if the recurring task will automatically add after recurrence completed.
-- email notif?
+- Vector Search (3)
 */
