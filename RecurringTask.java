@@ -7,11 +7,12 @@ public class RecurringTask {
     private String recurrenceInterval;
     private String nextDueDate;
 
-    public RecurringTask(String title, String description, String recurrenceInterval) {
+    // Updated constructor to accept nextDueDate
+    public RecurringTask(String title, String description, String recurrenceInterval, String nextDueDate) {
         this.title = title;
         this.description = description;
         this.recurrenceInterval = recurrenceInterval.toLowerCase();
-        this.nextDueDate = calculateNextDueDate(LocalDate.now()); // Set initial due date
+        this.nextDueDate = nextDueDate; // Initialize with user-provided date
     }
 
     public String getTitle() {
@@ -32,25 +33,27 @@ public class RecurringTask {
 
     public void updateNextDueDate() {
         LocalDate currentDueDate = LocalDate.parse(nextDueDate);
-        this.nextDueDate = calculateNextDueDate(currentDueDate);
-    }
-
-
-    private String calculateNextDueDate(LocalDate startDate) {
         switch (recurrenceInterval) {
             case "daily":
-                return startDate.plusDays(1).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                currentDueDate = currentDueDate.plusDays(1);
+                break;
             case "weekly":
-                return startDate.plusWeeks(1).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                currentDueDate = currentDueDate.plusWeeks(1);
+                break;
             case "monthly":
-                return startDate.plusMonths(1).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                currentDueDate = currentDueDate.plusMonths(1);
+                break;
             default:
                 throw new IllegalArgumentException("Invalid recurrence interval: " + recurrenceInterval);
         }
+        this.nextDueDate = currentDueDate.toString();
     }
 
     @Override
     public String toString() {
-        return String.format(" %s | %s - Recurrence Interval: %s", title, description, recurrenceInterval);
+        return String.format(
+                " %s | %s - Recurrence Interval: %s", title, description, recurrenceInterval
+        );
     }
 }
+
