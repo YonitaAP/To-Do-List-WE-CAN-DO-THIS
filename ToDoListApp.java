@@ -1,4 +1,3 @@
-
 import java.util.*;
 
 public class ToDoListApp {
@@ -94,11 +93,3 @@ public class ToDoListApp {
     }
 
 }
-
-
-/*
-This
-- Extra feature (Email notif) (1)
-- GUI (2)
-- Vector Search (3)
-*/
