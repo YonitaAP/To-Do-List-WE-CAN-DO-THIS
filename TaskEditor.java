@@ -18,9 +18,6 @@ public class TaskEditor {
         for (int i = 0; i < tasks.size(); i++) {
             Task task = tasks.get(i);
             System.out.println((i + 1) + ". " + task);
-            if (!task.getDependencies().isEmpty()) {
-                System.out.println("   Depends on: " + task.getDependencies());
-            }
         }
 
         System.out.print("\nEnter the task number to edit: ");
@@ -43,7 +40,7 @@ public class TaskEditor {
         System.out.println("║  3. Due Date                        ║");
         System.out.println("║  4. Category                        ║");
         System.out.println("║  5. Priority                        ║");
-        System.out.println("║  6. Dependencies                    ║");
+        System.out.println("║  6. Add dependencies                ║");
         System.out.println("║  7. Cancel                          ║");
         System.out.println("╚═════════════════════════════════════╝");
         System.out.print("☆ Enter your choice: ");
@@ -99,11 +96,17 @@ public class TaskEditor {
     }
 
     private void setTaskDependencies(Scanner scanner, Task task) {
-        System.out.println("Current dependencies: " + task.getDependencies());
-        System.out.println("1. Add Dependency");
-        System.out.println("2. Remove Dependency");
-        System.out.println("3. Cancel");
+        System.out.println("╔═══════════════════════════════════════════════════╗");
+        System.out.println("║             ★ Manage Task Dependencies ★          ║");
+        System.out.println("╚═══════════════════════════════════════════════════╝");
+        System.out.println(" Current dependencies: " + task.getDependencies());
+        System.out.println("╔═══════════════════════════════════════════════════╗");
+        System.out.println("║  1. Add Dependency                                ║");
+        System.out.println("║  2. Remove Dependency                             ║");
+        System.out.println("║  3. Cancel                                        ║");
+        System.out.println("╚═══════════════════════════════════════════════════╝");
         System.out.print("☆ Enter your choice: ");
+
         int choice = scanner.nextInt();
         scanner.nextLine(); // Consume newline
 
@@ -111,27 +114,30 @@ public class TaskEditor {
             case 1:
                 System.out.print("Enter the task number it depends on: ");
                 int dependsOnTaskNum = scanner.nextInt();
-                scanner.nextLine(); // Consume newline
+                scanner.nextLine();
+                
                 if (dependsOnTaskNum <= 0 || dependsOnTaskNum > tasks.size()) {
                     System.out.println("\nInvalid task number.");
                 } else if (task == tasks.get(dependsOnTaskNum - 1)) {
                     System.out.println("\nA task cannot depend on itself.");
-                } else if (task.getDependencies().contains(tasks.get(dependsOnTaskNum - 1).getTitle())) {
-                    System.out.println("\nThis dependency already exists.");
                 } else {
-                    task.getDependencies().add(tasks.get(dependsOnTaskNum - 1).getTitle());
-                    System.out.println("Dependency added successfully!");
+                    Task dependentTask = tasks.get(dependsOnTaskNum - 1);
+
+                    if (dependentTask.getDependencies().contains(task.getTitle())) {
+                        System.out.println("\nCircular dependency detected! Task cannot depend on each other.");
+                    } else {
+                        task.addDependency(dependentTask.getTitle());
+                        System.out.println("Dependency added successfully!");
+                    }
                 }
                 break;
             case 2:
                 System.out.println("Current dependencies: " + task.getDependencies());
                 System.out.print("Enter the dependency to remove: ");
                 String dependencyToRemove = scanner.nextLine();
-                if (task.getDependencies().remove(dependencyToRemove)) {
-                    System.out.println("Dependency removed successfully!");
-                } else {
-                    System.out.println("Dependency not found.");
-                }
+
+                task.removeDependency(dependencyToRemove);
+                System.out.println("Dependency removed successfully!");
                 break;
             case 3:
                 System.out.println("Canceling dependency edit.");
@@ -140,4 +146,5 @@ public class TaskEditor {
                 System.out.println("Invalid choice.");
         }
     }
+
 }
