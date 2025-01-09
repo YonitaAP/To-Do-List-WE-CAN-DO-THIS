@@ -38,7 +38,7 @@ public class RecurringTaskStorage {
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",", 4); 
                 if (parts.length == 4) {
-                    RecurringTask task = new RecurringTask(parts[0], parts[1], parts[2]);
+                    RecurringTask task = new RecurringTask(parts[0], parts[1], parts[2], parts[3]);
                     task.updateNextDueDate(); 
                     recurringTasks.add(task);
                 }
