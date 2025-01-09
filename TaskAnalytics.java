@@ -18,9 +18,9 @@ public class TaskAnalytics {
             categoryCounts.put(normalizedCategory, categoryCounts.getOrDefault(normalizedCategory, 0) + 1);
         }
 
-        System.out.println("╔═══════════════════════════════╗");
-        System.out.println("║    ★ Analytics Dashboard ★    ║");
-        System.out.println("╚═══════════════════════════════╝");
+        System.out.println("╔═════════════════════════════╗");
+        System.out.println("║   ★ Analytics Dashboard ★   ║");
+        System.out.println("╚═════════════════════════════╝");
         System.out.println("Total Tasks: " + totalTasks);
         System.out.println("Completed: " + completedTasks);
         System.out.println("Pending: " + (totalTasks - completedTasks));
