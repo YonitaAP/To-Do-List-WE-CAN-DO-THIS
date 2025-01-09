@@ -1,4 +1,1 @@
-testdep2,descdep2,2024-12-11,homework,low,false,testdep
-testdep,descdep,2024-01-02,work,low,false,
-makan,makan,2025-01-10,daily recurrence,Medium,true,
-makan,makan,2025-01-12,daily recurrence,Medium,false,
+title,description,dueDate,category,priority,isComplete,dependencies
