@@ -32,9 +32,8 @@ public class TaskStorage {
         try (BufferedReader reader = new BufferedReader(new FileReader(FILE_NAME))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",", 7); // Split by 7 columns
-
-                // Ensure that there are exactly 7 parts in each line
+                String[] parts = line.split(",", 7); 
+                
                 if (parts.length == 7) {
                     // If dependencies are empty, treat it as an empty list
                     List<String> dependencies = parts[6].isEmpty() ? new ArrayList<>() : Arrays.asList(parts[6].split(","));
@@ -46,6 +45,10 @@ public class TaskStorage {
                     System.out.println("Skipping invalid task entry (incorrect column count): " + line);
                 }
             }
+            System.out.println("\\ o /  _ o        __|    \\ /     |__        o _  \\ o /  ");
+            System.out.println("  |     /\\   __\\o   \\o    |    o/     o/__  /\\     |    ");
+            System.out.println(" / \\   | \\  /) |    ( \\  /o\\  / )     |  (\\  /|   / \\ ");
+            System.out.println();
             System.out.println("Tasks loaded successfully!");
         } catch (IOException e) {
             System.err.println("Error loading tasks: " + e.getMessage());
