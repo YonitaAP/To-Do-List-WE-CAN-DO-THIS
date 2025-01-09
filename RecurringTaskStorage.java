@@ -36,14 +36,13 @@ public class RecurringTaskStorage {
         try (BufferedReader reader = new BufferedReader(new FileReader(FILE_NAME))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",", 4); // Split into 4 parts: title, description, interval, nextDueDate
+                String[] parts = line.split(",", 4); 
                 if (parts.length == 4) {
                     RecurringTask task = new RecurringTask(parts[0], parts[1], parts[2]);
-                    task.updateNextDueDate(); // Update to align with the stored nextDueDate
+                    task.updateNextDueDate(); 
                     recurringTasks.add(task);
                 }
             }
-            System.out.println("Recurring tasks loaded successfully!");
         } catch (IOException e) {
             System.err.println("Error loading recurring tasks: " + e.getMessage());
         }
