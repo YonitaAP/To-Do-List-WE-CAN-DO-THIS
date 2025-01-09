@@ -1,6 +1,4 @@
-import java.util.Comparator;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class SearchSortTasks {
     private List<Task> tasks;
@@ -45,7 +43,7 @@ public class SearchSortTasks {
         System.out.println("╔═══════════════════════════╗");
         System.out.println("║       ★ Search by ★       ║");
         System.out.println("╠═══════════════════════════╣");
-        System.out.println("║ 1. Title                  ║");
+        System.out.println("║ 1. Title/Description      ║");
         System.out.println("║ 2. Category               ║");
         System.out.println("╚═══════════════════════════╝");
         System.out.print("☆ Enter your choice: ");
@@ -55,9 +53,9 @@ public class SearchSortTasks {
 
         switch (searchChoice) {
             case 1:
-                System.out.print("Enter the task title: ");
-                String title = scanner.nextLine();
-                searchTasksByTitle(title);
+                System.out.print("Enter the keyword (title/description): ");
+                String keyword = scanner.nextLine();
+                searchTasksByTitleOrDescription(keyword);
                 break;
             case 2:
                 System.out.print("Enter the task category: ");
@@ -107,11 +105,13 @@ public class SearchSortTasks {
     }
 
     // Searching methods
-    public void searchTasksByTitle(String title) {
+    public void searchTasksByTitleOrDescription(String keyword) {
         boolean found = false;
+        String lowerKeyword = keyword.toLowerCase(); // Normalize the keyword for case-insensitive search
 
         for (Task task : tasks) {
-            if (task.getTitle().equalsIgnoreCase(title)) {
+            // Check if the title or description contains the keyword
+            if (task.getTitle().toLowerCase().contains(lowerKeyword) || task.getDescription().toLowerCase().contains(lowerKeyword)) {
                 if (!found) {
                     System.out.println("\nFound Task(s):");
                     found = true;
@@ -121,7 +121,7 @@ public class SearchSortTasks {
         }
 
         if (!found) {
-            System.out.println("\nNo task found with the title: " + title);
+            System.out.println("\nNo task found with the keyword: " + keyword);
         }
     }
 
