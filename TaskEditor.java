@@ -1,14 +1,11 @@
-import java.util.*;
-
+import java.util.List;
+import java.util.Scanner;
 
 public class TaskEditor {
     private List<Task> tasks;
-    private Map<Integer, Integer> dependencies;
-
 
     public TaskEditor(List<Task> tasks) {
         this.tasks = tasks;
-        this.dependencies = new HashMap<>();
     }
 
     public void editTask(Scanner scanner) {
@@ -17,8 +14,13 @@ public class TaskEditor {
             return;
         }
 
+        // Display all tasks with dependencies
         for (int i = 0; i < tasks.size(); i++) {
-            System.out.println((i + 1) + ". " + tasks.get(i));
+            Task task = tasks.get(i);
+            System.out.println((i + 1) + ". " + task);
+            if (!task.getDependencies().isEmpty()) {
+                System.out.println("   Depends on: " + task.getDependencies());
+            }
         }
 
         System.out.print("\nEnter the task number to edit: ");
@@ -41,7 +43,7 @@ public class TaskEditor {
         System.out.println("║  3. Due Date                        ║");
         System.out.println("║  4. Category                        ║");
         System.out.println("║  5. Priority                        ║");
-        System.out.println("║  6. Add Dependency                  ║");
+        System.out.println("║  6. Dependencies                    ║");
         System.out.println("║  7. Cancel                          ║");
         System.out.println("╚═════════════════════════════════════╝");
         System.out.print("☆ Enter your choice: ");
@@ -83,11 +85,7 @@ public class TaskEditor {
                 task.setPriority(newPriority);
                 break;
             case 6:
-                System.out.print("\nEnter the task number to depend on: ");
-                int dependsOnNum = scanner.nextInt();
-                if (addDependency(taskNum - 1, dependsOnNum - 1)) {
-                    System.out.println("Dependency added successfully!");
-                }
+                setTaskDependencies(scanner, task);
                 break;
             case 7:
                 System.out.println("Edit canceled.");
@@ -99,47 +97,47 @@ public class TaskEditor {
 
         System.out.println("\nTask updated successfully!");
     }
-    
-    public boolean addDependency(int taskId, int dependsOnId) {
-        if (taskId < 0 || taskId >= tasks.size() || dependsOnId < 0 || dependsOnId >= tasks.size()) {
-            System.out.println("Invalid task ID(s) provided!");
-            return false;
+
+    private void setTaskDependencies(Scanner scanner, Task task) {
+        System.out.println("Current dependencies: " + task.getDependencies());
+        System.out.println("1. Add Dependency");
+        System.out.println("2. Remove Dependency");
+        System.out.println("3. Cancel");
+        System.out.print("☆ Enter your choice: ");
+        int choice = scanner.nextInt();
+        scanner.nextLine(); // Consume newline
+
+        switch (choice) {
+            case 1:
+                System.out.print("Enter the task number it depends on: ");
+                int dependsOnTaskNum = scanner.nextInt();
+                scanner.nextLine(); // Consume newline
+                if (dependsOnTaskNum <= 0 || dependsOnTaskNum > tasks.size()) {
+                    System.out.println("\nInvalid task number.");
+                } else if (task == tasks.get(dependsOnTaskNum - 1)) {
+                    System.out.println("\nA task cannot depend on itself.");
+                } else if (task.getDependencies().contains(tasks.get(dependsOnTaskNum - 1).getTitle())) {
+                    System.out.println("\nThis dependency already exists.");
+                } else {
+                    task.getDependencies().add(tasks.get(dependsOnTaskNum - 1).getTitle());
+                    System.out.println("Dependency added successfully!");
+                }
+                break;
+            case 2:
+                System.out.println("Current dependencies: " + task.getDependencies());
+                System.out.print("Enter the dependency to remove: ");
+                String dependencyToRemove = scanner.nextLine();
+                if (task.getDependencies().remove(dependencyToRemove)) {
+                    System.out.println("Dependency removed successfully!");
+                } else {
+                    System.out.println("Dependency not found.");
+                }
+                break;
+            case 3:
+                System.out.println("Canceling dependency edit.");
+                break;
+            default:
+                System.out.println("Invalid choice.");
         }
-        if (hasCycle(taskId, dependsOnId)) {
-            System.out.println("Error: Adding this dependency creates a cycle. Dependency not added.");
-            return false;
-        }
-        dependencies.put(taskId, dependsOnId);
-        System.out.println("Task \"" + tasks.get(taskId).getTitle() + "\" now depends on \"" + tasks.get(dependsOnId).getTitle() + "\".");
-        return true;
     }
-    
-    private boolean hasCycle(int taskId, int dependsOnId) {
-        Set<Integer> visited = new HashSet<>();
-        Set<Integer> stack = new HashSet<>();
-        Map<Integer, List<Integer>> graph = new HashMap<>();
-
-        for (Map.Entry<Integer, Integer> entry : dependencies.entrySet()) {
-            graph.computeIfAbsent(entry.getKey(), k -> new ArrayList<>()).add(entry.getValue());
-        }
-        graph.computeIfAbsent(taskId, k -> new ArrayList<>()).add(dependsOnId);
-
-        return dfs(taskId, graph, visited, stack);
-    }
-
-    private boolean dfs(int node, Map<Integer, List<Integer>> graph, Set<Integer> visited, Set<Integer> stack) {
-        if (stack.contains(node)) return true;
-        if (visited.contains(node)) return false;
-
-        visited.add(node);
-        stack.add(node);
-
-        for (int neighbor : graph.getOrDefault(node, Collections.emptyList())) {
-            if (dfs(neighbor, graph, visited, stack)) return true;
-        }
-
-        stack.remove(node);
-        return false;
-    }
-    
 }
