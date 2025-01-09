@@ -1,4 +1,3 @@
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class RecurringTask {
@@ -7,7 +6,6 @@ public class RecurringTask {
     private String recurrenceInterval;
     private String nextDueDate;
 
-    // Updated constructor to accept nextDueDate
     public RecurringTask(String title, String description, String recurrenceInterval, String nextDueDate) {
         this.title = title;
         this.description = description;
