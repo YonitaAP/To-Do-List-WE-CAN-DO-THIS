@@ -252,7 +252,7 @@ public class ManageTasks {
 
         System.out.print("Enter the task number to mark as complete (or 0 to cancel): ");
         int taskNumber = scanner.nextInt();
-        scanner.nextLine(); 
+        scanner.nextLine(); // Consume newline
         
         if (taskNumber == 0) {
                     System.out.println("Returning to the main menu.");
@@ -311,7 +311,7 @@ public class ManageTasks {
 
         System.out.print("Enter the task number to mark as incomplete (or 0 to cancel): ");
         int taskNumber = scanner.nextInt();
-        scanner.nextLine(); 
+        scanner.nextLine(); // Consume newline
 
         if (taskNumber == 0) {
             System.out.println("Returning to the main menu.");
@@ -326,6 +326,7 @@ public class ManageTasks {
                 return;
             }
 
+            // Reverse check for dependencies (if needed)
             for (Task dependentTask : tasks) {
                 List<String> dependencies = dependentTask.getDependencies();
                 if (dependencies.contains(task.getTitle()) && dependentTask.isComplete()) {
@@ -349,3 +350,5 @@ public class ManageTasks {
     }
 
 }
+    
+
