@@ -33,7 +33,9 @@ public class RecurringTask {
     public void updateNextDueDate() {
         LocalDate currentDueDate = LocalDate.parse(nextDueDate);
         this.nextDueDate = calculateNextDueDate(currentDueDate);
+        System.out.println("Updated next due date for recurring task: " + nextDueDate);
     }
+
 
     private String calculateNextDueDate(LocalDate startDate) {
         switch (recurrenceInterval) {
