@@ -1,4 +1,5 @@
 import java.util.*;
+import java.io.*;
 
 public class ToDoListApp {
     private static List<Task> tasks = new ArrayList<>();
@@ -28,7 +29,8 @@ public class ToDoListApp {
 
         while (true) {
             try {
-                System.out.println("\n╔═════════════════════════════╗");
+                System.out.println();
+                System.out.println("╔═════════════════════════════╗");
                 System.out.println("║    ☆ To-Do List Menu ☆      ║");
                 System.out.println("╠═════════════════════════════╣");
                 System.out.println("║  1. Add Task                ║");
@@ -44,7 +46,7 @@ public class ToDoListApp {
                 System.out.println("╠═════════════════════════════╣");
                 System.out.println("╚═════════════════════════════╝");
                 System.out.print("☆ Enter your choice: ");
-
+                
                 choice = scanner.nextInt();
                 scanner.nextLine(); // Consume newline
                 System.out.println();
