@@ -122,7 +122,8 @@ public class ManageTasks {
             title, 
             description, 
             recurringTask.getNextDueDate(), 
-            recurrenceInterval + " recurrence", 
+            recurrenceInterval + " recurrence"
+                    + "", 
             "Medium", 
             false, 
             new ArrayList<>() 
@@ -130,7 +131,7 @@ public class ManageTasks {
         tasks.add(regularTask);
 
         System.out.println("\nRecurring task \"" + title + "\" added successfully!");
-        System.out.println("Regular task created for the first occurrence.");
+        System.out.println("Task created for the first occurrence.");
 
         recurringTaskStorage.saveRecurringTasks(recurringTasks);
     }
@@ -152,7 +153,7 @@ public class ManageTasks {
 
 
             tasks.add(newTask);
-            System.out.println("\nNew regular task created for the next occurrence: " + newTask.getDueDate());
+            System.out.println("\nNew task created for the next occurrence: " + newTask.getDueDate());
 
             recurringTaskStorage.saveRecurringTasks(recurringTasks);
         }
@@ -350,5 +351,3 @@ public class ManageTasks {
     }
 
 }
-    
-
