@@ -18,7 +18,6 @@ public class Task {
         this.category = category;
         this.priority = priority;
         this.isComplete = isComplete;
-        // Ensure dependencies is a mutable list
         this.dependencies = dependencies != null ? new ArrayList<>(dependencies) : new ArrayList<>();
     }
 
