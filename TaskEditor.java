@@ -115,7 +115,7 @@ public class TaskEditor {
                 System.out.print("Enter the task number it depends on: ");
                 int dependsOnTaskNum = scanner.nextInt();
                 scanner.nextLine();
-                
+
                 if (dependsOnTaskNum <= 0 || dependsOnTaskNum > tasks.size()) {
                     System.out.println("\nInvalid task number.");
                 } else if (task == tasks.get(dependsOnTaskNum - 1)) {
@@ -125,6 +125,8 @@ public class TaskEditor {
 
                     if (dependentTask.getDependencies().contains(task.getTitle())) {
                         System.out.println("\nCircular dependency detected! Task cannot depend on each other.");
+                    } else if (hasCircularDependency(task, dependentTask)) {
+                        System.out.println("\nCircular dependency detected through multi-level dependencies!");
                     } else {
                         task.addDependency(dependentTask.getTitle());
                         System.out.println("Dependency added successfully!");
@@ -146,5 +148,24 @@ public class TaskEditor {
                 System.out.println("Invalid choice.");
         }
     }
+    
+    private boolean hasCircularDependency(Task currentTask, Task targetTask) {
+        if (currentTask == targetTask) {
+            return true; // Direct circular dependency
+        }
+
+        for (String dependencyTitle : targetTask.getDependencies()) {
+            Task dependencyTask = tasks.stream()
+                    .filter(t -> t.getTitle().equals(dependencyTitle))
+                    .findFirst()
+                    .orElse(null);
+            if (dependencyTask != null && hasCircularDependency(currentTask, dependencyTask)) {
+                return true; // Circular dependency found
+            }
+        }
+
+        return false;
+    }
+
 
 }
